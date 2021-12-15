@@ -27,6 +27,7 @@ function register_block_type() {
 								return array(
 									'name'  => $key,
 									'value' => $block['attributes'][ $key ],
+									'json'  => is_json( $block['attributes'][ $key ] )
 								);
 							},
 							array_keys( $block['attributes'] )
@@ -68,9 +69,17 @@ function register_block_type() {
 					'type'        => 'ID',
 					'description' => 'Relay ID of the block, encoding parent post ID and index',
 				],
+				'parent_id' => [
+					'type'        => 'ID',
+					'description' => 'Relay ID of the parent block',
+				],
 				'innerHtml' => [
 					'type'        => 'String',
 					'description' => 'Content block inner HTML',
+				],
+				'renderedHtml' => [
+					'type'        => 'String',
+					'description' => 'Rendered content of Gutenberg block'
 				],
 				'tagName' => [
 					'type'        => 'String',
@@ -85,3 +94,15 @@ function register_block_type() {
 	);
 }
 add_action( 'graphql_register_types', __NAMESPACE__ . '\\register_block_type', 10, 0 );
+
+/**
+ * Check whether string is valid json.
+ *
+ * @param string $string String to be checked.
+ *
+ * @return bool
+ */
+function is_json( $string ) {
+	@json_decode( $string );
+	return json_last_error() === JSON_ERROR_NONE;
+}
