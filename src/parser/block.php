@@ -528,6 +528,7 @@ class Block {
 	 */
 	public function get_parent_id( $post_relay_id ) {
 		if ( ! is_null( $this->parent_block_index ) ) {
+            $this->parent_block_index = $this->parent_block_index - 1;
 			return Relay::toGlobalId( 'block', "{$post_relay_id}|{$this->parent_block_index}" );
 		} else {
 			return null;
