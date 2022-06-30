@@ -25,7 +25,11 @@ class GutenbergBlock extends Block {
 		$this->set_attributes( $block['attrs'] );
 		$this->set_parent_block_index( $parent_block_index );
 
-		$rendered_content = render_block( $block );
+        $priority = has_filter( 'the_content', 'wpautop' );
+        if ( false !== $priority ) {
+            remove_filter( 'the_content', 'wpautop', $priority );
+        }
+        $rendered_content = apply_filters( 'the_content', render_block( $block ) );
 		$this->set_rendered_content( $rendered_content );
 	}
 
